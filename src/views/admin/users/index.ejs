@@ -1,0 +1,161 @@
+<%- include('../../partials/header') %>
+
+  <main class="page-container">
+    <div class="section-header">
+      <div>
+        <h1 class="page-title">Kelola User</h1>
+        <p class="page-subtitle" style="margin-bottom: 0;">Admin dapat mengelola semua pengguna sistem.</p>
+      </div>
+      <a href="/admin/users/create" class="btn btn-primary btn-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        Tambah User
+      </a>
+    </div>
+
+    <!-- Flash: tampilkan kode verifikasi -->
+    <% if (flash && flash.type === 'code') { %>
+      <div style="
+        background: #ecfdf5; border: 1.5px solid #6ee7b7;
+        border-radius: 10px; padding: 14px 18px;
+        margin-bottom: 20px;
+        display: flex; align-items: center; gap: 12px;
+      ">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        <div>
+          <p style="font-size: 0.82rem; color: #065f46; font-weight: 500; margin-bottom: 4px;">
+            <%= flash.message.replace(flash.code, '') %>
+          </p>
+          <span style="
+            font-family: var(--font-display);
+            font-size: 1.8rem; font-weight: 800;
+            color: #047857;
+            letter-spacing: 0.25em;
+            background: rgba(16,185,129,0.12);
+            padding: 4px 16px; border-radius: 8px;
+          "><%= flash.code %></span>
+          <p style="font-size: 0.72rem; color: #059669; margin-top: 4px;">
+            Berikan kode ini kepada user agar dapat melakukan verifikasi email.
+          </p>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status Akun</th>
+            <th>Verifikasi Email</th>
+            <th>Kode</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(function(u) { %>
+            <tr>
+              <td><strong><%= u.name %></strong></td>
+              <td style="font-size: 0.85rem;"><%= u.email %></td>
+              <td>
+                <span class="badge badge-info"><%= u.role_name %></span>
+              </td>
+              <td>
+                <span class="badge <%= u.is_active ? 'badge-success' : 'badge-muted' %>">
+                  <span class="badge-dot"></span>
+                  <%= u.is_active ? 'Aktif' : 'Nonaktif' %>
+                </span>
+              </td>
+              <td>
+                <% if (u.role_name === 'admin') { %>
+                  <span class="badge badge-success" style="font-size: 0.72rem;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Terverifikasi
+                  </span>
+                <% } else if (u.email_verified_at) { %>
+                  <span class="badge badge-success" style="font-size: 0.72rem;" title="Diverifikasi pada <%= new Date(u.email_verified_at).toLocaleString('id-ID') %>">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Terverifikasi
+                  </span>
+                <% } else { %>
+                  <span style="
+                    font-size: 0.72rem; font-weight: 600; color: #92400e;
+                    display: inline-flex; align-items: center; gap: 4px;
+                  ">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    Belum Verifikasi
+                  </span>
+                <% } %>
+              </td>
+              <td>
+                <% if (u.role_name !== 'admin' && !u.email_verified_at && u.verification_token) { %>
+                  <span style="
+                    font-family: var(--font-display);
+                    font-size: 1rem; font-weight: 800;
+                    color: #6366f1;
+                    letter-spacing: 0.12em;
+                    background: rgba(99,102,241,0.08);
+                    padding: 2px 10px; border-radius: 6px;
+                    border: 1px solid rgba(99,102,241,0.20);
+                  "><%= u.verification_token %></span>
+                <% } else { %>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);">—</span>
+                <% } %>
+              </td>
+              <td class="table-actions">
+                <a href="/admin/users/<%= u.id %>/edit" class="btn btn-outline btn-sm">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                  Edit
+                </a>
+
+                <!-- Tombol Generate Kode Baru (hanya guru/siswa yang belum terverifikasi) -->
+                <% if (u.role_name !== 'admin' && !u.email_verified_at) { %>
+                  <form action="/admin/users/<%= u.id %>/regenerate-code" method="POST" class="inline-form"
+                    onsubmit="return confirm('Buat kode verifikasi baru untuk <%= u.name %>? Kode lama tidak berlaku lagi.')">
+                    <button type="submit" class="btn btn-sm" style="
+                      background: #eff6ff; color: #1d4ed8;
+                      border: 1.5px solid #bfdbfe;
+                    " title="Buat kode verifikasi baru">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                      </svg>
+                      Kode Baru
+                    </button>
+                  </form>
+                <% } %>
+
+                <% if (u.id !== user.id) { %>
+                  <form action="/admin/users/<%= u.id %>/delete" method="POST" class="inline-form"
+                    onsubmit="return confirm('Hapus user ini?')">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                      </svg>
+                      Hapus
+                    </button>
+                  </form>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <%- include('../../partials/footer') %>

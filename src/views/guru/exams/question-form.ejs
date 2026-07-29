@@ -1,0 +1,64 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <a href="/guru/exams/<%= exam.id %>/questions" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Kembali
+  </a>
+  <div class="page-card form-max">
+    <h1 class="page-title">Tambah Soal</h1>
+    <p class="page-subtitle">Ujian: <%= exam.title %></p>
+
+    <form action="/guru/exams/<%= exam.id %>/questions" method="POST">
+      <div class="form-group">
+        <label for="question_text">Pertanyaan</label>
+        <textarea id="question_text" name="question_text" rows="3" placeholder="Tulis pertanyaan di sini..." required></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="points">Poin</label>
+          <input type="number" id="points" name="points" value="10" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="order_number">Urutan</label>
+          <input type="number" id="order_number" name="order_number" value="1" min="1" required>
+        </div>
+      </div>
+
+      <h3 class="form-section-title">Pilihan Jawaban</h3>
+      <div class="form-group">
+        <label for="option_a">A</label>
+        <input type="text" id="option_a" name="option_a" placeholder="Pilihan jawaban A" required>
+      </div>
+      <div class="form-group">
+        <label for="option_b">B</label>
+        <input type="text" id="option_b" name="option_b" placeholder="Pilihan jawaban B" required>
+      </div>
+      <div class="form-group">
+        <label for="option_c">C</label>
+        <input type="text" id="option_c" name="option_c" placeholder="Pilihan jawaban C" required>
+      </div>
+      <div class="form-group">
+        <label for="option_d">D</label>
+        <input type="text" id="option_d" name="option_d" placeholder="Pilihan jawaban D" required>
+      </div>
+      <div class="form-group">
+        <label for="correct_option">Jawaban Benar</label>
+        <select id="correct_option" name="correct_option" required>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan Soal
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../../partials/footer') %>

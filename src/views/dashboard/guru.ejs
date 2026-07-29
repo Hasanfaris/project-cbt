@@ -1,0 +1,369 @@
+<%- include('../partials/header') %>
+
+<style>
+  :root {
+    --primary-orange: #ff6a00;
+    --primary-orange-hover: #e05d00;
+    --primary-orange-light: rgba(255, 106, 0, 0.08);
+    --primary-orange-glow: rgba(255, 106, 0, 0.15);
+    --neutral-dark: #0f172a;
+    --neutral-slate: #334155;
+    --neutral-light: #f8fafc;
+    --border-color: #e2e8f0;
+  }
+
+  .exam-page-container {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--neutral-slate);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  .exam-header-card {
+    background: linear-gradient(135deg, #ffffff, #fffaf5);
+    border: 1px solid rgba(255, 106, 0, 0.15);
+    border-radius: 20px;
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 25px rgba(255, 106, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .badge-category-exam {
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary-orange-light);
+    color: var(--primary-orange);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 30px;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .exam-title-main {
+    font-size: 28px;
+    color: var(--neutral-dark);
+    margin: 0 0 6px 0;
+    font-weight: 800;
+  }
+
+  .exam-subtitle-main {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .exam-workspace-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .exam-active-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .exam-premium-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .exam-premium-card:hover {
+    border-color: var(--primary-orange);
+    box-shadow: 0 12px 30px rgba(255, 106, 0, 0.06);
+    transform: translateY(-2px);
+  }
+
+  .exam-card-subject-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary-orange);
+    background-color: var(--primary-orange-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .exam-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--neutral-dark);
+    margin: 0 0 8px 0;
+  }
+
+  .exam-card-desc {
+    font-size: 13.5px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+  }
+
+  .exam-meta-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-top: 1.5px solid #f1f5f9;
+    padding-top: 16px;
+  }
+
+  .exam-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .btn-exam-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #ff8c00, #ff5100);
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+
+  .btn-exam-action:hover {
+    background: linear-gradient(135deg, #e05d00, #cc4200);
+    transform: translateY(-1px);
+    color: #ffffff;
+  }
+
+  .results-section-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    display: block;
+  }
+
+  .results-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1.5px solid #f1f5f9;
+    padding-bottom: 12px;
+  }
+
+  .results-table-header h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin: 0;
+  }
+
+  .table-responsive-wrapper {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+  }
+
+  .results-custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13.5px;
+  }
+
+  .results-custom-table th {
+    background-color: var(--neutral-light);
+    color: #475569;
+    font-weight: 700;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  .results-custom-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .badge-status-submitted {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #ecfdf5;
+    color: #059669;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 30px;
+  }
+
+  .score-cell-badge {
+    font-family: monospace;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--primary-orange);
+    background: var(--primary-orange-light);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 968px) {
+    .exam-workspace-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>
+
+<main class="exam-page-container">
+  <div class="exam-header-card">
+    <span class="badge-category-exam">Menu Evaluasi</span>
+    <h1 class="exam-title-main">Daftar Ujian</h1>
+    <p class="exam-subtitle-main">Siswa dapat mengerjakan ujian aktif. Guru dan admin dapat melihat ringkasan hasil secara langsung.</p>
+  </div>
+
+  <div class="exam-workspace-grid">
+    <div class="exam-left-column">
+      <div class="exam-active-section-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Ujian Tersedia
+      </div>
+
+      <% if (typeof exams !== 'undefined' && exams && exams.length > 0) { %>
+        <% exams.forEach(function(exam) { %>
+          <div class="exam-premium-card" style="margin-bottom: 20px;">
+            <span class="exam-card-subject-tag"><%= exam.subject_name || 'Mata Pelajaran' %></span>
+            <h3 class="exam-card-title"><%= exam.title %></h3>
+            <p class="exam-card-desc"><%= exam.description || '' %></p>
+            
+            <div class="exam-meta-info-list">
+              <div class="exam-meta-item">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span><strong>Durasi:</strong> <%= exam.duration_minutes %> menit</span>
+              </div>
+            </div>
+
+            <!-- Memicu filter JS sesuai exam_id yang diklik -->
+            <button type="button" class="btn-exam-action" onclick="filterHasilUjian('<%= exam.id %>', '<%= exam.title %>')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Lihat Hasil Ujian
+            </button>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="exam-premium-card">
+          <p style="text-align: center; color: #64748b; margin: 0;">Belum ada ujian yang tersedia.</p>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="results-section-card" id="tabel-hasil-ujian">
+      <div class="results-table-header">
+        <h2>Hasil &amp; Ringkasan <span id="selected-exam-title" style="color: var(--primary-orange); font-size: 15px; margin-left: 6px;"></span></h2>
+      </div>
+
+      <div class="table-responsive-wrapper">
+        <table class="results-custom-table">
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Email</th>
+              <th>Kelas</th>
+              <th>Status</th>
+              <th>Nilai</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (typeof examResults !== 'undefined' && Array.isArray(examResults) && examResults.length > 0) { %>
+              <% examResults.forEach(function(result) { %>
+                <tr class="result-row" data-exam-id="<%= result.exam_id %>">
+                  <td><strong style="color: var(--neutral-dark);"><%= result.student_name %></strong></td>
+                  <td><%= result.student_email %></td>
+                  <td><%= result.class_name || '-' %></td>
+                  <td>
+                    <span class="badge-status-submitted">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      <%= result.status %>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="score-cell-badge"><%= parseFloat(result.score || 0).toFixed(2) %></span>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } %>
+
+            <!-- Pesan jika tidak ada siswa yang mengerjakan ujian yang dipilih -->
+            <tr id="empty-results-row" style="display: none;">
+              <td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px;">
+                Belum ada riwayat pengerjaan siswa untuk ujian ini.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function filterHasilUjian(examId, examTitle) {
+    const rows = document.querySelectorAll('.result-row');
+    const emptyRow = document.getElementById('empty-results-row');
+    const titleHeader = document.getElementById('selected-exam-title');
+    
+    let visibleCount = 0;
+
+    // Tampilkan judul ujian yang diklik di atas tabel
+    if (titleHeader) {
+      titleHeader.textContent = `— ${examTitle}`;
+    }
+
+    // Filter baris sesuai ID Ujian
+    rows.forEach(row => {
+      if (row.getAttribute('data-exam-id') == examId) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    // Jika belum ada siswa yang mengerjakan ujian ini
+    if (emptyRow) {
+      emptyRow.style.display = visibleCount === 0 ? '' : 'none';
+    }
+
+    // Auto-scroll ke tabel
+    const tabelHasil = document.getElementById('tabel-hasil-ujian');
+    if (tabelHasil) {
+      tabelHasil.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+</script>
+
+<%- include('../partials/footer') %>

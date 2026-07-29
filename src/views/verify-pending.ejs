@@ -1,0 +1,126 @@
+<%- include('partials/header', { user: null }) %>
+
+<main class="login-wrapper">
+  <div class="login-card" style="max-width: 480px;">
+
+    <!-- Icon -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 72px; height: 72px; border-radius: 50%;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        box-shadow: 0 8px 24px rgba(245,158,11,0.30);
+        margin-bottom: 16px;
+      ">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+      </div>
+      <h1 style="font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+        Cek Email Anda
+      </h1>
+      <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">
+        Akun Anda belum diverifikasi.<br/>
+        Kami telah mengirimkan link verifikasi ke:<br/>
+        <% if (pendingEmail) { %>
+          <strong style="color: var(--primary); font-size: 15px;"><%= pendingEmail %></strong>
+        <% } else { %>
+          <em>alamat email yang didaftarkan</em>
+        <% } %>
+      </p>
+    </div>
+
+    <!-- Flash Message -->
+    <% if (flash) { %>
+      <div class="flash flash-<%= flash.type %>" style="margin-bottom: 20px;">
+        <% if (flash.type === 'success') { %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <% } else { %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <% } %>
+        <%= flash.message %>
+      </div>
+    <% } %>
+
+    <!-- Steps -->
+    <div style="
+      background: var(--bg-secondary, #f8fafc);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    ">
+      <p style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px;">
+        Langkah Verifikasi
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="width: 24px; height: 24px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+            <span style="color: #fff; font-size: 12px; font-weight: 700;">1</span>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Buka aplikasi email Anda (Gmail, Outlook, dll.)
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="width: 24px; height: 24px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+            <span style="color: #fff; font-size: 12px; font-weight: 700;">2</span>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Cari email dari <strong>MauBelajar</strong> dengan subjek <em>"Verifikasi Email Anda"</em>
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="width: 24px; height: 24px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+            <span style="color: #fff; font-size: 12px; font-weight: 700;">3</span>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Klik tombol <strong>"Verifikasi Email Saya"</strong> di dalam email tersebut
+          </p>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <div style="width: 24px; height: 24px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+            Akun Anda aktif dan dapat digunakan untuk login
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+
+      <!-- Kirim Ulang Email -->
+      <% if (pendingEmail) { %>
+        <form action="/verify-pending/resend" method="POST">
+          <button type="submit" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            Kirim Ulang Email Verifikasi
+          </button>
+        </form>
+      <% } %>
+
+      <!-- Kembali ke Login -->
+      <a href="/login" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Kembali ke Login
+      </a>
+    </div>
+
+    <!-- Info tambahan -->
+    <p style="font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 20px; line-height: 1.6;">
+      Tidak menerima email? Cek folder <strong>Spam/Junk</strong> Anda.<br/>
+      Jika masalah berlanjut, hubungi administrator.
+    </p>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>

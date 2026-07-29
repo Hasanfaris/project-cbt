@@ -1,0 +1,84 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <div class="exam-timer-bar">
+    <div>
+      <h1 class="page-title"><%= attempt.exam_title %></h1>
+      <p class="page-subtitle" style="margin-bottom: 0;">Kerjakan semua soal lalu klik Kirim Jawaban.</p>
+    </div>
+    <div class="timer-box">
+      <div class="timer-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <span>Sisa Waktu</span>
+        <strong id="timer">--:--</strong>
+      </div>
+    </div>
+  </div>
+
+  <form action="/siswa/exams/<%= attempt.exam_id %>/submit/<%= attempt.id %>" method="POST" id="examForm">
+    <% questions.forEach(function(q, index) { %>
+    <div class="page-card question-card" style="margin-bottom: 0.75rem;">
+      <div class="question-header">
+        <strong>Soal <%= index + 1 %></strong>
+        <span class="badge badge-info"><%= q.points %> poin</span>
+      </div>
+      <p class="question-text"><%= q.question_text %></p>
+      <div class="option-list">
+        <% q.options.forEach(function(opt) { %>
+        <label class="option-item">
+          <input type="radio" name="answer_<%= q.id %>" value="<%= opt.id %>" required>
+          <span><strong><%= opt.option_label %>.</strong> <%= opt.option_text %></span>
+        </label>
+        <% }) %>
+      </div>
+    </div>
+    <% }) %>
+
+    <div class="form-actions" style="margin-top: 1.5rem;">
+      <button type="submit" class="btn btn-primary" onclick="return confirm('Kirim jawaban? Tidak dapat diubah setelah dikirim.')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Kirim Jawaban
+      </button>
+    </div>
+  </form>
+</main>
+
+<script>
+  let remaining = <%= remainingSeconds %>;
+  const timerEl = document.getElementById('timer');
+  const form = document.getElementById('examForm');
+
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  }
+
+  function tick() {
+    if (remaining <= 0) {
+      timerEl.textContent = '00:00';
+      alert('Waktu habis! Jawaban akan dikirim otomatis.');
+      form.submit();
+      return;
+    }
+    timerEl.textContent = formatTime(remaining);
+    if (remaining <= 60) {
+      timerEl.style.animation = 'pulse-danger 1s ease-in-out infinite';
+    }
+    remaining--;
+    setTimeout(tick, 1000);
+  }
+
+  tick();
+</script>
+
+<style>
+  @keyframes pulse-danger {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+</style>
+
+<%- include('../../partials/footer') %>

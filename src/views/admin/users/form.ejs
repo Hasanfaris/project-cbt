@@ -1,0 +1,51 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <a href="/admin/users" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Kembali
+  </a>
+  <div class="page-card form-max">
+    <h1 class="page-title"><%= editUser ? 'Edit User' : 'Tambah User' %></h1>
+    <p class="page-subtitle"><%= editUser ? 'Perbarui informasi pengguna.' : 'Isi form berikut untuk menambahkan pengguna baru.' %></p>
+
+    <form action="<%= editUser ? '/admin/users/' + editUser.id : '/admin/users' %>" method="POST">
+      <div class="form-group">
+        <label for="name">Nama</label>
+        <input type="text" id="name" name="name" value="<%= editUser ? editUser.name : '' %>" placeholder="Masukkan nama lengkap" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<%= editUser ? editUser.email : '' %>" placeholder="nama@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="role_id">Role</label>
+        <select id="role_id" name="role_id" required>
+          <% roles.forEach(function(role) { %>
+          <option value="<%= role.id %>" <%= editUser && editUser.role_id === role.id ? 'selected' : '' %>><%= role.name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <% if (editUser) { %>
+      <div class="form-group form-check">
+        <label>
+          <input type="checkbox" name="is_active" value="1" <%= editUser.is_active ? 'checked' : '' %>>
+          Akun aktif
+        </label>
+      </div>
+      <% } %>
+      <div class="form-group">
+        <label for="password">Password <%= editUser ? '(kosongkan jika tidak diubah)' : '' %></label>
+        <input type="password" id="password" name="password" placeholder="<%= editUser ? 'Biarkan kosong jika tidak diubah' : 'Masukkan password' %>" <%= editUser ? '' : 'required' %>>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../../partials/footer') %>

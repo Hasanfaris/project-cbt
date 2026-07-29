@@ -1,0 +1,758 @@
+<%- include('../partials/header') %>
+
+<style>
+  :root {
+    --primary-orange: #ff6a00;
+    --primary-orange-hover: #e05d00;
+    --primary-orange-light: rgba(255, 106, 0, 0.08);
+    --primary-orange-glow: rgba(255, 106, 0, 0.15);
+    --neutral-dark: #0f172a;
+    --neutral-slate: #334155;
+    --neutral-light: #f8fafc;
+    --border-color: #e2e8f0;
+  }
+
+  .admin-dashboard {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: var(--neutral-slate);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  /* Header Section */
+  .dashboard-header-card {
+    background: linear-gradient(135deg, #ffffff, #fffaf5);
+    border: 1px solid rgba(255, 106, 0, 0.15);
+    border-radius: 20px;
+    padding: 24px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 25px rgba(255, 106, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dashboard-header-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 250px;
+    height: 100%;
+    background: radial-gradient(circle at top right, rgba(255, 106, 0, 0.05), transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge-category {
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary-orange-light);
+    color: var(--primary-orange);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 30px;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .dashboard-title {
+    font-size: 28px;
+    color: var(--neutral-dark);
+    margin: 0 0 6px 0;
+    font-weight: 800;
+  }
+
+  .dashboard-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* Two-Column Grid */
+  .dashboard-workspace {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+
+  /* Stats Container */
+  .workspace-left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .stats-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stats-grid-custom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card-custom {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-card-custom:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-orange);
+    box-shadow: 0 12px 20px rgba(255, 106, 0, 0.05);
+  }
+
+  .stat-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--primary-orange-light);
+    color: var(--primary-orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .stat-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--neutral-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label-txt {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .stat-info-bar {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+    background: #f8fafc;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+
+  /* Quick Navigation Cards */
+  .quick-links-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .quick-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1.5px solid var(--border-color);
+    color: var(--neutral-slate);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .quick-nav-btn:hover {
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+    background: var(--primary-orange-light);
+    transform: translateY(-1px);
+  }
+
+  /* Form Card Styling (Right Column) */
+  .form-card-custom {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+
+  .form-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin: 0 0 16px 0;
+    border-bottom: 1.5px solid #f1f5f9;
+    padding-bottom: 12px;
+  }
+
+  .custom-form-group {
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .custom-form-group input, 
+  .custom-form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    color: var(--neutral-dark);
+    background-color: var(--neutral-light);
+  }
+
+  .custom-form-group input:focus,
+  .custom-form-group select:focus {
+    border-color: var(--primary-orange);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px var(--primary-orange-glow);
+  }
+
+  .btn-submit-orange {
+    width: 100%;
+    background: linear-gradient(135deg, #ff8c00, #ff5100);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 81, 0, 0.15);
+  }
+
+  .btn-submit-orange:hover {
+    background: linear-gradient(135deg, #e05d00, #cc4200);
+    transform: translateY(-1px);
+  }
+
+  /* Flash Alert Code Box */
+  .flash-success-code {
+    background: #ecfdf5;
+    border: 1.5px solid #6ee7b7;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+  }
+
+  .code-display {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 24px;
+    font-weight: 800;
+    color: #047857;
+    letter-spacing: 0.15em;
+    background: rgba(16, 185, 129, 0.12);
+    padding: 6px 16px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 8px 0;
+  }
+
+  /* Table Section (Bottom Wide) */
+  .table-section {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+
+  .table-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1.5px solid #f1f5f9;
+    padding-bottom: 12px;
+  }
+
+  .table-header-custom h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin: 0;
+  }
+
+  .table-wrapper-custom {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #f1f5f9;
+  }
+
+  .table-custom {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+  }
+
+  .table-custom th {
+    background-color: var(--neutral-light);
+    color: #475569;
+    font-weight: 700;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .table-custom td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: var(--neutral-slate);
+  }
+
+  .table-custom tr:hover {
+    background-color: #fffbf7;
+  }
+
+  /* Custom Status Badges */
+  .badge-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 30px;
+  }
+
+  .badge-custom-verified {
+    background-color: #ecfdf5;
+    color: #059669;
+  }
+
+  .badge-custom-pending {
+    background-color: #fffbeb;
+    color: #b45309;
+  }
+
+  .badge-role-user {
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .token-box-demo {
+    font-family: monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary-orange);
+    background: var(--primary-orange-light);
+    border: 1px dashed rgba(255, 106, 0, 0.3);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  /* Action Buttons in Table */
+  .btn-action-regen {
+    background: #ffffff;
+    color: var(--primary-orange);
+    border: 1.5px solid rgba(255, 106, 0, 0.3);
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-action-regen:hover {
+    background: var(--primary-orange);
+    color: #ffffff;
+    border-color: var(--primary-orange);
+    box-shadow: 0 4px 10px rgba(255, 106, 0, 0.15);
+  }
+
+  /* Elegant Custom Confirmation Modal (No browser alert/confirm popup!) */
+  .custom-confirm-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .custom-confirm-card {
+    background: #ffffff;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 106, 0, 0.1);
+    transform: scale(0.95);
+    animation: scaleUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  .confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .confirm-icon-warning {
+    width: 40px;
+    height: 40px;
+    background: #fffbeb;
+    color: #d97706;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .confirm-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neutral-dark);
+    margin: 0;
+  }
+
+  .confirm-text {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+  }
+
+  .confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .btn-confirm-cancel {
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-confirm-proceed {
+    background: var(--primary-orange);
+    color: #ffffff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleUp {
+    to { transform: scale(1); }
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 968px) {
+    .dashboard-workspace {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .stats-grid-custom {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<main class="admin-dashboard">
+  
+  <!-- Header Card -->
+  <div class="dashboard-header-card">
+    <span class="badge-category">Akses Administrator</span>
+    <h1 class="dashboard-title">Dashboard Admin</h1>
+    <p class="dashboard-subtitle">Pantau seluruh statistik pengerjaan ujian serta lakukan pengelolaan verifikasi akun.</p>
+  </div>
+
+  <div class="dashboard-workspace">
+    <!-- KOLOM KIRI: Statistik dan Menu Cepat -->
+    <div class="workspace-left">
+      <div>
+        <div class="stats-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          Ringkasan Platform
+        </div>
+        
+        <div class="stats-grid-custom">
+          <!-- Card Total Users -->
+          <div class="stat-card-custom">
+            <div>
+              <div class="stat-icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="stat-num"><%= stats.totalUsers || 0 %></div>
+              <div class="stat-label-txt">Jumlah User</div>
+            </div>
+          </div>
+
+          <!-- Card Total Exams -->
+          <div class="stat-card-custom">
+            <div>
+              <div class="stat-icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <div class="stat-num"><%= stats.totalExams || 0 %></div>
+              <div class="stat-label-txt">Total Ujian</div>
+            </div>
+          </div>
+
+          <!-- Card Total Attempts -->
+          <div class="stat-card-custom">
+            <div>
+              <div class="stat-icon-wrap">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="stat-num"><%= stats.totalAttempts || 0 %></div>
+              <div class="stat-label-txt">Pengerjaan</div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-info-bar">
+          💡 <strong>Tips:</strong> Klik "Lihat Hasil" pada halaman kelola mata pelajaran untuk meninjau transkip nilai mahasiswa.
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <div class="stats-section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Navigasi Cepat
+        </div>
+        <div class="quick-links-group">
+          <a href="/admin/users" class="quick-nav-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Kelola Semua User
+          </a>
+          <a href="/admin/subjects" class="quick-nav-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Kelola Mata Pelajaran
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOLOM KANAN: Formulir Tambah User & Alert Code -->
+    <div class="form-card-custom">
+      <h2 class="form-card-title">Tambah Akun Guru / Siswa</h2>
+
+      <!-- Flash: tampilkan kode verifikasi jika baru dibuat -->
+      <% if (flash && flash.type === 'code') { %>
+        <div class="flash-success-code">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" style="flex-shrink: 0;">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <div>
+            <p style="font-size: 13px; color: #065f46; font-weight: 600; margin: 0 0 4px 0;">User Berhasil Dibuat!</p>
+            <p style="font-size: 12px; color: #047857; margin: 0 0 8px 0;">Gunakan kode demo verifikasi berikut:</p>
+            <span class="code-display"><%= flash.code %></span>
+            <p style="font-size: 11px; color: #059669; margin: 4px 0 0 0; line-height: 1.4;">
+              Berikan kode di atas kepada user baru untuk proses aktivasi akun.
+            </p>
+          </div>
+        </div>
+      <% } else if (flash && flash.type !== 'code') { %>
+        <div class="flash flash-<%= flash.type %>" style="margin-bottom: 20px; border-radius: 12px; font-size: 13px; padding: 12px 16px;">
+          <%= flash.message %>
+        </div>
+      <% } %>
+
+      <!-- Form Submission -->
+      <form action="/admin/users" method="POST">
+        <div class="custom-form-group">
+          <input type="text" name="name" placeholder="Nama Lengkap" required>
+        </div>
+        <div class="custom-form-group">
+          <input type="email" name="email" placeholder="Alamat Email" required>
+        </div>
+        <div class="custom-form-group">
+          <input type="password" name="password" placeholder="Password Akun" required>
+        </div>
+        <div class="custom-form-group">
+          <select name="role_id" required>
+            <option value="" disabled selected>— Pilih Hak Akses (Role) —</option>
+            <option value="2">Guru</option>
+            <option value="3">Siswa</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-submit-orange">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Simpan Akun Baru
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TABEL BAWAH: Status Verifikasi User (Full Width) -->
+  <div class="table-section">
+    <div class="table-header-custom">
+      <h2>Daftar Status Verifikasi Email User (Demo)</h2>
+    </div>
+
+    <div class="table-wrapper-custom">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Nama</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Kode Demo</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (typeof verificationList !== 'undefined' && verificationList.length > 0) { %>
+            <% verificationList.forEach(function(u) { %>
+              <tr>
+                <td><strong style="color: var(--neutral-dark);"><%= u.name %></strong></td>
+                <td><%= u.email %></td>
+                <td>
+                  <span class="badge-role-user"><%= u.role_name %></span>
+                </td>
+                <td>
+                  <% if (u.email_verified_at) { %>
+                    <span class="badge-custom badge-custom-verified">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                      Terverifikasi
+                    </span>
+                  <% } else { %>
+                    <span class="badge-custom badge-custom-pending">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      Menunggu Verifikasi
+                    </span>
+                  <% } %>
+                </td>
+                <td>
+                  <% if (!u.email_verified_at && u.verification_token) { %>
+                    <span class="token-box-demo"><%= u.verification_token %></span>
+                  <% } else if (u.email_verified_at) { %>
+                    <span style="color: #cbd5e1; font-style: italic; font-size: 13px;">— Selesai —</span>
+                  <% } else { %>
+                    <span style="color: #94a3b8; font-size: 13px;">Belum dibuat</span>
+                  <% } %>
+                </td>
+                <td>
+                  <% if (!u.email_verified_at) { %>
+                    <!-- PENTING: submit ditangani oleh custom script di bawah untuk menghindari alert/confirm bawaan browser -->
+                    <form action="/admin/users/<%= u.id %>/regenerate-code" method="POST" class="inline-form" id="regen-form-<%= u.id %>">
+                      <button type="button" class="btn-action-regen" onclick="openConfirmationModal('<%= u.name %>', 'regen-form-<%= u.id %>')">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Sandi Baru
+                      </button>
+                    </form>
+                  <% } %>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="6" style="text-align: center; color: #94a3b8; padding: 32px;">
+                Belum ada guru atau siswa yang terdaftar di sistem.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<!-- Custom Modal Dialog (Menggantikan confirm() popup agar tampilan modern dan memenuhi kriteria keamanan) -->
+<div class="custom-confirm-backdrop" id="customConfirmModal">
+  <div class="custom-confirm-card">
+    <div class="confirm-header">
+      <div class="confirm-icon-warning">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <h3 class="confirm-title">Konfirmasi Regenerasi</h3>
+    </div>
+    <p class="confirm-text" id="confirmMessage">Apakah Anda yakin ingin membuat kode verifikasi baru?</p>
+    <div class="confirm-actions">
+      <button class="btn-confirm-cancel" onclick="closeConfirmationModal()">Batalkan</button>
+      <button class="btn-confirm-proceed" id="confirmProceedBtn">Ya, Buat Baru</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let targetedFormId = null;
+
+  function openConfirmationModal(userName, formId) {
+    targetedFormId = formId;
+    const modal = document.getElementById('customConfirmModal');
+    const msg = document.getElementById('confirmMessage');
+    msg.innerHTML = `Buat kode verifikasi baru untuk pengguna <strong>${userName}</strong>? Kode lama yang belum terpakai akan otomatis hangus.`;
+    modal.style.display = 'flex';
+  }
+
+  function closeConfirmationModal() {
+    document.getElementById('customConfirmModal').style.display = 'none';
+    targetedFormId = null;
+  }
+
+  // Tambahkan event listener saat user mengklik tombol konfirmasi "Ya, Buat Baru"
+  document.getElementById('confirmProceedBtn').addEventListener('click', function() {
+    if (targetedFormId) {
+      document.getElementById(targetedFormId).submit();
+    }
+    closeConfirmationModal();
+  });
+</script>
+
+<%- include('../partials/footer') %>

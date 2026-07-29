@@ -1,0 +1,56 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <div class="section-header">
+    <div>
+      <h1 class="page-title">Kelola Mata Pelajaran</h1>
+      <p class="page-subtitle" style="margin-bottom: 0;">Admin dapat mengelola daftar mata pelajaran yang tersedia.</p>
+    </div>
+    <a href="/admin/subjects/create" class="btn btn-primary btn-sm">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Tambah Mata Pelajaran
+    </a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nama Mata Pelajaran</th>
+          <th>Deskripsi</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (subjects && subjects.length > 0) { %>
+          <% subjects.forEach(function(s) { %>
+          <tr>
+            <td><%= s.id %></td>
+            <td><strong><%= s.name %></strong></td>
+            <td><%= s.description || '-' %></td>
+            <td class="table-actions">
+              <a href="/admin/subjects/<%= s.id %>/edit" class="btn btn-outline btn-sm">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </a>
+              <form action="/admin/subjects/<%= s.id %>/delete" method="POST" class="inline-form" onsubmit="return confirm('Hapus mata pelajaran ini?')">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Hapus
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 2rem;">Belum ada data mata pelajaran.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,177 @@
+<%- include('partials/header', { user: null, flash: null }) %>
+
+<!-- Menyatukan CSS langsung ke dalam file EJS -->
+<style>
+  /* Layout Utama */
+  .hero-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 40px 20px;
+    background: radial-gradient(circle at top right, rgba(255, 122, 0, 0.1), transparent 50%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .hero-split {
+    display: flex;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    max-width: 1000px;
+    width: 100%;
+    padding: 50px;
+    gap: 50px;
+    align-items: center;
+  }
+
+  .hero-content {
+    flex: 1.5;
+  }
+
+  /* Badge & Typography */
+  .badge-promo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(255, 122, 0, 0.1);
+    color: #ff6a00;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .hero-heading {
+    font-size: 30px;
+    color: #1e293b;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    font-weight: 800;
+  }
+
+  .brand-orange {
+    color: #ff6a00;
+  }
+
+  .hero-paragraph {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* Tombol Oranye */
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+  }
+
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .btn-orange-filled {
+    background-color: #ff6a00;
+    color: white;
+  }
+
+  .btn-orange-filled:hover {
+    background-color: #e05d00;
+  }
+
+  .btn-orange-outline {
+    border: 2px solid #ff6a00;
+    color: #ff6a00;
+  }
+
+  .btn-orange-outline:hover {
+    background-color: rgba(255, 122, 0, 0.05);
+  }
+
+  /* Samping Kanan: Statistik */
+  .hero-metrics-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-left: 2px solid #f1f5f9;
+    padding-left: 40px;
+  }
+
+  .metric-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #ff6a00;
+  }
+
+  .metric-txt {
+    font-size: 13px;
+    color: #94a3b8;
+  }
+
+  /* Responsif Tampilan Mobile */
+  @media (max-width: 768px) {
+    .hero-split {
+      flex-direction: column;
+      padding: 30px 20px;
+      gap: 30px;
+    }
+    .hero-metrics-side {
+      border-left: none;
+      border-top: 2px solid #f1f5f9;
+      padding-left: 0;
+      padding-top: 30px;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>
+
+<main class="hero-wrapper">
+  <div class="hero-split">
+    <!-- Bagian Kiri: Teks dan Tombol Navigasi -->
+    <div class="hero-content">
+      <div class="badge-promo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>Sistem Ujian Digital</span>
+      </div>
+      
+      <h1 class="hero-heading">
+        Raih Prestasi Gemilang Bersama <span class="brand-orange">Cendikia Nusantara</span>
+      </h1>
+      
+      <p class="hero-paragraph">
+        Solusi cerdas pelaksanaan ujian berbasis daring bagi mahasiswa. Akses pendaftaran, pengerjaan soal, hingga evaluasi hasil otomatis kini terintegrasi dalam satu sistem yang responsif.
+      </p>
+      
+      <div class="hero-buttons">
+        <a href="/login" class="btn-action btn-orange-filled">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Mulai Ujian
+        </a>
+        <a href="/dashboard" class="btn-action btn-orange-outline">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          Panel Utama
+        </a>
+      </div>
+    </div>
+
+
+</main>
+
+<%- include('partials/footer') %>

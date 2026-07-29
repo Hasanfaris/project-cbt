@@ -1,0 +1,91 @@
+CREATE DATABASE IF NOT EXISTS cbt_db;
+USE cbt_db;
+
+CREATE TABLE IF NOT EXISTS roles (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL UNIQUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  role_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (role_id) REFERENCES roles(id)
+);
+
+CREATE TABLE IF NOT EXISTS subjects (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  description TEXT,
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS exams (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject_id INT NOT NULL,
+  created_by INT NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  description TEXT,
+  duration_minutes INT NOT NULL DEFAULT 60,
+  is_active TINYINT(1) DEFAULT 0,
+  start_at DATETIME,
+  end_at DATETIME,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (subject_id) REFERENCES subjects(id),
+  FOREIGN KEY (created_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS questions (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  exam_id INT NOT NULL,
+  question_text TEXT NOT NULL,
+  points INT NOT NULL DEFAULT 1,
+  order_number INT NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS options (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  question_id INT NOT NULL,
+  option_label CHAR(1) NOT NULL,
+  option_text TEXT NOT NULL,
+  is_correct TINYINT(1) DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS exam_attempts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  exam_id INT NOT NULL,
+  user_id INT NOT NULL,
+  started_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  finished_at DATETIME,
+  score DECIMAL(5,2) DEFAULT 0,
+  status ENUM('in_progress', 'submitted', 'expired') DEFAULT 'in_progress',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (exam_id) REFERENCES exams(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  UNIQUE KEY unique_user_exam (exam_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS student_answers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  exam_attempt_id INT NOT NULL,
+  question_id INT NOT NULL,
+  option_id INT,
+  is_correct TINYINT(1) DEFAULT 0,
+  answered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (exam_attempt_id) REFERENCES exam_attempts(id) ON DELETE CASCADE,
+  FOREIGN KEY (question_id) REFERENCES questions(id),
+  FOREIGN KEY (option_id) REFERENCES options(id)
+);

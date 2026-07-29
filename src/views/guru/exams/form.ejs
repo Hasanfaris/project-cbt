@@ -1,0 +1,66 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <a href="/guru/exams" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Kembali
+  </a>
+  <div class="page-card form-max">
+    <h1 class="page-title"><%= exam ? 'Edit Ujian' : 'Buat Ujian' %></h1>
+    <p class="page-subtitle"><%= exam ? 'Perbarui detail ujian.' : 'Isi detail ujian baru untuk siswa.' %></p>
+    
+    <form action="<%= exam ? '/guru/exams/' + exam.id : '/guru/exams' %>" method="POST">
+      <div class="form-group">
+        <label for="subject_id">Mata Pelajaran</label>
+        <select id="subject_id" name="subject_id" required>
+          <% subjects.forEach(function(subject) { %>
+            <option value="<%= subject.id %>" <%= exam && exam.subject_id === subject.id ? 'selected' : '' %>><%= subject.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="title">Judul Ujian</label>
+        <input type="text" id="title" name="title" value="<%= exam ? exam.title : '' %>" placeholder="Contoh: UTS Matematika Kelas 10" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Deskripsi</label>
+        <textarea id="description" name="description" rows="3" placeholder="Tambahkan deskripsi ujian (opsional)"><%= exam ? exam.description || '' : '' %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="duration_minutes">Durasi (menit)</label>
+        <input type="number" id="duration_minutes" name="duration_minutes" min="1" value="<%= exam ? exam.duration_minutes : 60 %>" required>
+      </div>
+      
+      <!-- KOLOM BARU: Tingkat Kesulitan -->
+      <div class="form-group">
+        <label for="tingkat">Tingkat Kesulitan</label>
+        <select id="tingkat" name="tingkat" required>
+          <option value="Mudah" <%= exam && exam.tingkat === 'Mudah' ? 'selected' : '' %>>Mudah</option>
+          <option value="Sedang" <%= !exam || (exam && exam.tingkat === 'Sedang') ? 'selected' : '' %>>Sedang</option>
+          <option value="Sulit" <%= exam && exam.tingkat === 'Sulit' ? 'selected' : '' %>>Sulit</option>
+        </select>
+      </div>
+      
+      <!-- DROPDOWN STATUS UJIAN (PENGGANTI CHECKBOX MASALAH) -->
+      <div class="form-group">
+        <label for="is_active">Status Ujian</label>
+        <select id="is_active" name="is_active" required style="cursor: pointer;">
+          <option value="1" <%= exam && exam.is_active ? 'selected' : '' %>>Aktif (Siswa dapat mengerjakan)</option>
+          <option value="0" <%= !exam || (exam && !exam.is_active) ? 'selected' : '' %>>Nonaktif / Draft</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,51 @@
+<%- include('../../partials/header') %>
+
+<main class="page-container">
+  <div class="page-card result-card">
+    <div style="text-align: center; margin-bottom: 0.5rem;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <h1 class="page-title" style="text-align: center;">Hasil Ujian</h1>
+    <p class="page-subtitle" style="text-align: center;"><%= result.attempt.exam_title %></p>
+
+    <div class="score-display">
+      <span>Nilai Anda</span>
+      <strong><%= result.attempt.score %></strong>
+    </div>
+
+    <p class="text-small" style="text-align: center;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline; vertical-align: -2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Diselesaikan pada: <%= new Date(result.attempt.finished_at).toLocaleString('id-ID') %>
+    </p>
+
+    <h2 class="section-title">Rincian Jawaban</h2>
+    <div class="result-list">
+      <% result.answers.forEach(function(ans, index) { %>
+      <div class="result-item <%= ans.is_correct ? 'correct' : 'wrong' %>">
+        <div class="question-header">
+          <strong>Soal <%= index + 1 %></strong>
+          <span class="badge <%= ans.is_correct ? 'badge-success' : 'badge-danger' %>">
+            <% if (ans.is_correct) { %>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <% } else { %>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <% } %>
+            <%= ans.is_correct ? 'Benar' : 'Salah' %>
+          </span>
+        </div>
+        <p class="question-text"><%= ans.question_text %></p>
+        <p class="text-small">Jawaban: <%= ans.option_label ? ans.option_label + '. ' + ans.option_text : 'Tidak dijawab' %></p>
+      </div>
+      <% }) %>
+    </div>
+
+    <div class="form-actions" style="justify-content: center; margin-top: 2rem;">
+      <a href="/siswa/exams" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Kembali ke Daftar Ujian
+      </a>
+    </div>
+  </div>
+</main>
+
+<%- include('../../partials/footer') %>

@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+
+<main class="page-container" style="background-color: #f8fafc; padding-top: 2rem; padding-bottom: 2rem; min-height: calc(100vh - 64px);">
+  <div class="page-header" style="margin-bottom: 2rem;">
+    <span class="page-label" style="font-size: 0.75rem; font-weight: 700; color: #ff6a00; letter-spacing: 0.05em; text-transform: uppercase;">DASHBOARD</span>
+    <h1 class="page-title" style="font-size: 2rem; font-weight: 700; color: #0f172a; margin-top: 0.5rem; margin-bottom: 0.5rem;">Daftar Ujian</h1>
+    <p class="page-subtitle" style="font-size: 0.95rem; color: #64748b;">Siswa dapat mengerjakan ujian aktif. Guru dan admin dapat melihat ringkasan hasil.</p>
+  </div>
+
+  <div class="exam-list" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+    <% const unsubmittedExams = exams.filter(e => e.attempt_status !== 'submitted'); %>
+    <% if (unsubmittedExams.length === 0) { %>
+      <div style="grid-column: 1 / -1; color: #64748b; font-size: 0.9rem;">Belum ada ujian aktif yang tersedia.</div>
+    <% } else { %>
+      <% unsubmittedExams.forEach(function(exam) { %>
+      <div class="exam-card" style="background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem; display: flex; flex-direction: column; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <span style="font-size: 0.7rem; font-weight: 700; color: #ff6a00; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem;"><%= exam.subject_name %></span>
+        <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0 0 0.5rem 0;"><%= exam.title %></h3>
+        <p style="font-size: 0.875rem; color: #64748b; margin: 0 0 1.5rem 0; line-height: 1.5;"><%= exam.description || 'Tidak ada deskripsi' %></p>
+        
+        <table style="width: 100%; font-size: 0.875rem; margin-bottom: 1.5rem; border-collapse: collapse;">
+          <tr>
+            <td style="color: #64748b; padding-bottom: 0.5rem; width: 70px;">Durasi:</td>
+            <td style="color: #0f172a; padding-bottom: 0.5rem;"><%= exam.duration_minutes %> menit</td>
+          </tr>
+          <tr>
+            <td style="color: #64748b; padding-bottom: 0.5rem;">Status:</td>
+            <td style="color: #0f172a; padding-bottom: 0.5rem;"><%= exam.attempt_status === 'in_progress' ? 'Sedang dikerjakan' : 'Belum dikerjakan' %></td>
+          </tr>
+          <tr>
+            <td style="color: #64748b;">Nilai:</td>
+            <td style="color: #0f172a; font-weight: 700;">-</td>
+          </tr>
+        </table>
+        
+        <% if (exam.attempt_status === 'in_progress') { %>
+          <a href="/siswa/exams/<%= exam.id %>/take/<%= exam.attempt_id %>" class="btn btn-primary" style="background-color: #2563eb; border: none; color: white; padding: 0.6rem 1.25rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-block; align-self: flex-start;">Lanjutkan Ujian</a>
+        <% } else { %>
+          <form action="/siswa/exams/<%= exam.id %>/start" method="POST" class="inline-form" style="margin: 0;">
+            <button type="submit" class="btn btn-primary" style="background-color: #ff6a00; border: none; color: white; padding: 0.6rem 1.25rem; border-radius: 0.5rem; text-decoration: none; font-size: 0.875rem; font-weight: 600; display: inline-block; align-self: flex-start; cursor: pointer;">Kerjakan Ujian</button>
+          </form>
+        <% } %>
+      </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <div style="background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+    <div class="section-header" style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin: 0;">Hasil / Ringkasan</h2>
+    </div>
+
+    <div class="table-wrap" style="border: none; box-shadow: none; margin: 0;">
+      <% const submittedExams = exams.filter(e => e.attempt_status === 'submitted'); %>
+      <table style="width: 100%; text-align: left; font-size: 0.875rem; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th style="padding: 1rem 0; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e2e8f0;">UJIAN</th>
+            <th style="padding: 1rem 0; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e2e8f0;">MATA PELAJARAN</th>
+            <th style="padding: 1rem 0; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e2e8f0;">STATUS</th>
+            <th style="padding: 1rem 0; font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #e2e8f0; text-align: right;">NILAI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (submittedExams.length === 0) { %>
+            <tr><td colspan="4" style="padding: 1.5rem 0; color: #64748b; text-align: center; border-bottom: 1px solid #e2e8f0;">Belum ada riwayat ujian.</td></tr>
+          <% } else { %>
+            <% submittedExams.forEach(function(exam) { %>
+            <tr>
+              <td style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0; color: #334155;"><%= exam.title %></td>
+              <td style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0; color: #334155;"><%= exam.subject_name %></td>
+              <td style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0; color: #334155;"><%= exam.attempt_status %></td>
+              <td style="padding: 1rem 0; border-bottom: 1px solid #e2e8f0; color: #0f172a; font-weight: 700; text-align: right;"><%= Number(exam.attempt_score).toFixed(2) %></td>
+            </tr>
+            <% }) %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

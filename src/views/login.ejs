@@ -1,0 +1,229 @@
+<%- include('partials/header', { user: null, flash: null }) %>
+
+<style>
+  .login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    padding: 40px 20px;
+    background: radial-gradient(circle at bottom left, rgba(255, 122, 0, 0.08), transparent 45%),
+                radial-gradient(circle at top right, rgba(255, 122, 0, 0.05), transparent 40%);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .login-card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(255, 122, 0, 0.15);
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+
+  .login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .login-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #ff8c00, #ff5100);
+    color: #ffffff;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(255, 81, 0, 0.25);
+  }
+
+  .login-header h1 {
+    font-size: 28px;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    font-weight: 800;
+  }
+
+  .login-header p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 8px;
+    text-align: left;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .form-group input:focus {
+    border-color: #ff6a00;
+    box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.15);
+  }
+
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .btn-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #ff8c00, #ff5100);
+    color: #ffffff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 81, 0, 0.15);
+  }
+
+  .btn-submit:hover {
+    background: linear-gradient(135deg, #e05d00, #cc4200);
+    transform: translateY(-1px);
+  }
+
+  .verify-link-container {
+    text-align: center;
+    font-size: 13px;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 4px 0;
+  }
+
+  .verify-link-container a {
+    color: #ff6a00;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .verify-link-container a:hover {
+    text-decoration: underline;
+    color: #e05d00;
+  }
+
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 2px solid #ff6a00;
+    color: #ff6a00;
+    background-color: transparent;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  .btn-back:hover {
+    background-color: rgba(255, 122, 0, 0.05);
+    transform: translateY(-1px);
+  }
+</style>
+
+<main class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+      </div>
+      <h1>Selamat Datang</h1>
+      <p>Masuk ke akun Cendikia Nusantara Anda</p>
+    </div>
+
+    <!-- Menampilkan flash message jika ada -->
+    <% if (typeof flash !== 'undefined' && flash && flash.type !== 'code') { %>
+      <div class="flash flash-<%= flash.type %>" style="margin-bottom: 16px; border-radius: 10px; font-size: 13px;">
+        <%= flash.message %>
+      </div>
+    <% } %>
+
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="nama@email.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Masuk
+        </button>
+
+
+        <!-- Link Verifikasi Kode Admin -->
+        <p class="verify-link-container">
+          Sudah daftar tapi belum aktif? 
+          <a href="/verify-email">
+            Masukkan kode verifikasi disini →
+          </a>
+        </p>
+
+        <a href="/" class="btn-back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/>
+            <polyline points="12 19 5 12 12 5"/>
+          </svg>
+          Kembali ke Beranda
+        </a>
+      </div>
+    </form>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+```
+eof

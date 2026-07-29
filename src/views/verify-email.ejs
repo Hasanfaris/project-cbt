@@ -1,0 +1,140 @@
+<%- include('partials/header', { user: null }) %>
+
+<main class="login-wrapper">
+  <div class="login-card" style="max-width: 420px;">
+
+    <!-- Header -->
+    <div class="login-header" style="text-align: center; margin-bottom: 28px;">
+      <div style="
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 56px; height: 56px; border-radius: 14px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        box-shadow: 0 8px 20px rgba(99,102,241,0.30);
+        margin-bottom: 16px;
+      ">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h1 style="font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px;">
+        Verifikasi Email
+      </h1>
+      <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+        Masukkan email dan kode 6 digit yang diberikan admin
+      </p>
+    </div>
+
+    <!-- Flash Message -->
+    <% if (flash) { %>
+      <div class="flash flash-<%= flash.type === 'code' ? 'success' : flash.type %>"
+           style="margin-bottom: 20px; border-radius: 10px;">
+        <% if (flash.type === 'success') { %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <% } else if (flash.type === 'error') { %>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <% } %>
+        <span><%= flash.message %></span>
+      </div>
+    <% } %>
+
+    <!-- Form -->
+    <form action="/verify-email" method="POST" id="verify-form">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label for="verify-email-input" style="font-size: 0.82rem; font-weight: 600; color: var(--text-body); margin-bottom: 6px; display: block;">
+          Email
+        </label>
+        <input
+          type="email"
+          id="verify-email-input"
+          name="email"
+          value="<%= prefillEmail %>"
+          placeholder="Masukkan email akun Anda"
+          required
+          style="width: 100%;"
+        >
+      </div>
+
+      <div class="form-group" style="margin-bottom: 24px;">
+        <label for="verify-code" style="font-size: 0.82rem; font-weight: 600; color: var(--text-body); margin-bottom: 6px; display: block;">
+          Kode Verifikasi
+        </label>
+        <input
+          type="text"
+          id="verify-code"
+          name="code"
+          placeholder="Masukkan kode 6 digit dari admin"
+          maxlength="6"
+          pattern="\d{6}"
+          autocomplete="one-time-code"
+          inputmode="numeric"
+          required
+          style="
+            width: 100%;
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            text-align: center;
+            padding: 0.75rem 1rem;
+          "
+        >
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+          Kode diberikan oleh admin saat akun Anda dibuat.
+        </p>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        id="verify-btn"
+        style="
+          width: 100%;
+          padding: 0.85rem;
+          font-size: 0.95rem;
+          border-radius: var(--radius-sm);
+          background: linear-gradient(135deg, #6366f1, #4f46e5);
+          border-color: #6366f1;
+          box-shadow: 0 4px 14px rgba(99,102,241,0.30);
+          margin-bottom: 14px;
+        "
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Verifikasi
+      </button>
+    </form>
+
+    <!-- Kembali ke login -->
+    <div style="text-align: center;">
+      <a href="/login" style="
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.15s;
+      " onmouseover="this.style.color='#6366f1'" onmouseout="this.style.color=''">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Kembali ke login
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // Auto format kode: hanya izinkan angka
+  const codeInput = document.getElementById('verify-code');
+  if (codeInput) {
+    codeInput.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+  }
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,22 @@
+<%- include('partials/header', { user: typeof user !=='undefined' ? user : null }) %>
+
+  <main class="error-page">
+    <div class="error-card">
+      <div class="error-code">404</div>
+      <h1 class="page-title" style="text-align: center; margin-bottom: 0.5rem;">Halaman Tidak Ditemukan</h1>
+      <p class="page-subtitle" style="text-align: center;">Maaf, halaman yang Anda cari tidak ada atau telah
+        dipindahkan.</p>
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="/" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+          Kembali ke Beranda
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>

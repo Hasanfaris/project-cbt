@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cendikia Nusantara — Platform ujian online terpercaya untuk praktik siswa dan mahasiswa.">
+  <title><%= typeof title !== 'undefined' ? title : 'Cendikia Nusantara' %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Variabel CSS Global & Styling Navbar Premium -->
+  <style>
+    :root {
+      --primary: #ff6a00;
+      --primary-hover: #e05d00;
+      --primary-light: rgba(255, 106, 0, 0.08);
+      --primary-glow: rgba(255, 106, 0, 0.15);
+      --neutral-dark: #0f172a;
+      --neutral-slate: #334155;
+      --neutral-light: #f8fafc;
+      --border-color: #e2e8f0;
+    }
+
+    /* Reset global minimal untuk kenyamanan tema */
+    body {
+      font-family: 'Manrope', 'Hanken Grotesk', sans-serif;
+      background-color: #f8fafc;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Navbar Container */
+    .navbar {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.02);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Logo Brand */
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--primary) !important;
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      transition: transform 0.2s ease;
+    }
+
+    .navbar-brand:hover {
+      transform: translateY(-1px);
+    }
+
+    .navbar-brand svg {
+      color: var(--primary);
+    }
+
+    /* Navigation Menu */
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .navbar-menu a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--neutral-slate) !important;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .navbar-menu a:hover {
+      background-color: var(--primary-light);
+      color: var(--primary) !important;
+    }
+
+    .navbar-menu a svg {
+      color: #94a3b8;
+      transition: color 0.2s ease;
+    }
+
+    .navbar-menu a:hover svg {
+      color: var(--primary);
+    }
+
+    /* User Profile Pill */
+    .navbar-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--neutral-light);
+      color: var(--neutral-slate);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    .navbar-user svg {
+      color: #ff6a00;
+    }
+
+    /* Tombol Keluar (Logout) */
+    .btn-logout-orange {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-logout-orange:hover {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(255, 106, 0, 0.15);
+    }
+
+    /* Banner Flash Info */
+    .flash {
+      max-width: 1200px;
+      margin: 16px auto 0 auto;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-sizing: border-box;
+    }
+
+    .flash-success {
+      background-color: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .flash-warning {
+      background-color: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .flash-error {
+      background-color: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    /* Responsivitas Mobile */
+    @media (max-width: 768px) {
+      .navbar-inner {
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+      }
+      .navbar-menu {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        gap: 8px;
+      }
+      .navbar-menu a {
+        padding: 6px 10px;
+        font-size: 12.5px;
+      }
+      .navbar-user {
+        width: 100%;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+      .btn-logout-orange {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <% if (typeof user !== 'undefined' && user) { %>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <!-- Logo Cendikia Nusantara -->
+      <a href="/dashboard" class="navbar-brand">
+        <!-- Ikon Obor Pendidikan & Bintang Kebijaksanaan (Cendikia Nusantara) -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" fill="currentColor" fill-opacity="0.15"/>
+        </svg>
+        <span>Cendikia Nusantara</span>
+      </a>
+
+      <!-- Menu Navigasi Berdasarkan Role Akses -->
+      <div class="navbar-menu">
+        <!-- Menu Beranda (Tampil untuk semua pengguna) -->
+        <a href="/dashboard">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Beranda
+        </a>
+
+        <% if (user.role_name === 'admin') { %>
+          <a href="/admin/users">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Kelola User
+          </a>
+          <a href="/admin/subjects">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Mata Pelajaran
+          </a>
+        <% } %>
+        <% if (user.role_name === 'guru') { %>
+          <a href="/guru/exams">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Kelola Ujian
+          </a>
+        <% } %>
+        <% if (user.role_name === 'siswa') { %>
+          <a href="/siswa/exams">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+            Daftar Ujian
+          </a>
+        <% } %>
+
+        <!-- User Information Badge -->
+        <span class="navbar-user">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <%= user.name %> (<%= user.role_name %>)
+        </span>
+
+        <!-- Logout Form Button -->
+        <form action="/logout" method="POST" style="margin: 0; display: inline-block;">
+          <button type="submit" class="btn-logout-orange">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Keluar
+          </button>
+        </form>
+      </div>
+    </div>
+  </nav>
+  <% } %>
+
+  <!-- Alert Flash Alert Sistem -->
+  <% if (typeof flash !== 'undefined' && flash && flash.type !== 'code') { %>
+  <div class="flash flash-<%= flash.type %>">
+    <% if (flash.type === 'success') { %>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <% } else if (flash.type === 'warning') { %>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <% } else { %>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <% } %>
+    <%= flash.message %>
+  </div>
+  <% } %>
