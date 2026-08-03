@@ -16,6 +16,7 @@ module.exports = {
     database: process.env.DB_DATABASE || 'cbt_db',
     username: process.env.DB_USERNAME || 'root',
     password: process.env.DB_PASSWORD || '',
+    ssl: process.env.DB_SSL === 'true',
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'change_this_secret_key',
